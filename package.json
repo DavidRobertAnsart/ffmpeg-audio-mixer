@@ -1,0 +1,19 @@
+{
+  "name": "node-tune",
+  "version": "1.0.0",
+  "description": "A node audio processing library using FFMPEG. It can convert audio files, concatenate, mix and more soon!",
+  "main": "lib/index.js",
+  "repository": "https://github.com/DavidRobertAnsart/node-tune",
+  "author": "David Robert-Ansart",
+  "license": "MIT",
+  "packageManager": "yarn@3.2.1",
+  "scripts": {
+    "typescript": "tsc -p .",
+    "build": "swc ./src -d lib"
+  },
+  "devDependencies": {
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.2.205",
+    "typescript": "^4.7.4"
+  }
+}
