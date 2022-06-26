@@ -1,0 +1,14 @@
+module.exports = {
+    trailingComma: 'all',
+    printWidth: 100,
+    singleQuote: true,
+    tabWidth: 4,
+    overrides: [
+        {
+            files: '*.json',
+            options: {
+                tabWidth: 2,
+            },
+        },
+    ],
+};
