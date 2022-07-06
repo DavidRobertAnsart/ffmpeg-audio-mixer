@@ -1,4 +1,5 @@
-export function tuneHelloWorld() {
-    // eslint-disable-next-line no-console
-    console.log('Hello, world!');
-}
+export * from './tune.types';
+export { Tune } from './tune';
+import { tune } from './tune';
+
+export default tune;

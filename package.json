@@ -1,7 +1,7 @@
 {
   "name": "node-tune",
-  "version": "1.0.0",
-  "description": "A node audio processing library using FFMPEG. It can convert audio files, concatenate, mix and more soon!",
+  "version": "1.1.0",
+  "description": "A node audio processing library using FFmpeg. It can convert audio files, mix them, and more soon!",
   "repository": "https://github.com/DavidRobertAnsart/node-tune",
   "author": "David Robert-Ansart",
   "license": "MIT",
@@ -16,12 +16,15 @@
     "prepare": "yarn build",
     "build": "yarn rollup -c",
     "lint": "eslint .",
-    "typescript": "tsc -p ."
+    "typescript": "tsc -p .",
+    "test": "yarn esr tests/index.ts"
   },
   "devDependencies": {
+    "@types/node": "16.11.7",
     "@typescript-eslint/eslint-plugin": "5.29.0",
     "@typescript-eslint/parser": "5.29.0",
     "esbuild": "^0.14.47",
+    "esbuild-runner": "^2.2.1",
     "eslint": "8.18.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-import-resolver-node": "0.3.6",
@@ -32,7 +35,6 @@
     "rollup": "^2.75.7",
     "rollup-plugin-dts": "^4.2.2",
     "rollup-plugin-esbuild": "^4.9.1",
-    "ts-node": "^10.8.1",
     "typescript": "4.7.4"
   }
 }

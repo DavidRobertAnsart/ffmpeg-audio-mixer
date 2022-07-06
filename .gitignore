@@ -20,5 +20,7 @@ Thumbs.db
 # Build files
 lib
 
-# local test file
+# local test files
 tests
+Dockerfile
+docker-compose.yml
