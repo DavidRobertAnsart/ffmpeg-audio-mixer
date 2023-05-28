@@ -1,4 +1,5 @@
 import { execCommand } from './exec-command';
+import { getFfmpegArgs } from './get-ffmpeg-args';
 import type { InputOptions, OutputOptions, Codecs, SampleFormats } from './tune.types';
 
 const getInput = (input: string | InputOptions) =>
@@ -42,59 +43,45 @@ export class Tune {
     }
 
     // --- Processing ---
-    public async toFile(outputFile: string): Promise<string> {
-        if (!outputFile) {
+    public async toFile(outputFileName: string): Promise<string> {
+        if (!outputFileName) {
             throw new Error('Missing output file path');
         }
 
-        // [1] Add inputs.
-        let command = `ffmpeg -y`;
-        for (const input of this.inputs) {
-            command += ` -i ${input.inputFile}`;
+        const args = getFfmpegArgs(this.inputs, this.options, {
+            kind: 'file',
+            fileName: outputFileName,
+        });
+        // eslint-disable-next-line no-console
+        console.log(args);
+        await execCommand('ffmpeg', args);
+        return outputFileName;
+    }
+
+    public toStream(fileFormat: string) {
+        if (!fileFormat) {
+            throw new Error('Missing output file format');
         }
 
-        // [3] Set complex filter.
-        const complexFilter: string[] = [];
-        const inputsNames = Object.keys(this.inputs);
-        for (let i = 0; i < this.inputs.length; i++) {
-            const input = this.inputs[i];
-            if (input.delay !== undefined && input.delay !== 0) {
-                complexFilter.push(`[${i}]adelay=${input.delay}:1[${i}bis]`);
-                inputsNames[i] = `${i}bis`;
-            }
-        }
-        if (this.inputs.length > 1) {
-            complexFilter.push(
-                `[${inputsNames.join('][')}]amix=inputs=${
-                    this.inputs.length
-                }:duration=longest:weights=${this.inputs.map((i) => i.weight ?? 1).join(' ')}`,
+        const args = getFfmpegArgs(this.inputs, this.options, {
+            kind: 'stream',
+            fileFormat,
+        });
+        // eslint-disable-next-line no-console
+        console.log(args);
+        return execCommand('ffmpeg', args, true);
+    }
+
+    public toBuffer(fileFormat: string) {
+        const outputStream = this.toStream(fileFormat);
+        return new Promise<Buffer>((resolve, reject) => {
+            const _buf = Array<Uint8Array>();
+            outputStream.on('data', (chunk) => _buf.push(chunk));
+            outputStream.on('end', () => resolve(Buffer.concat(_buf)));
+            outputStream.on('error', (err) =>
+                reject(`Error converting stream audio to buffer: ${err}`),
             );
-        }
-        if (this.options.volume !== undefined) {
-            if (complexFilter.length > 0) {
-                complexFilter.push(`volume=${this.options.volume}`);
-            } else {
-                command += ` -filter:a "volume=${this.options.volume}"`;
-            }
-        }
-        if (complexFilter.length > 0) {
-            command += ` -filter_complex "${complexFilter.join(',')}"`;
-        }
-
-        // [2] Set output options
-        if (this.options.codec !== undefined) {
-            command += ` -codec:a ${this.options.codec}`;
-        }
-        if (this.options.frames !== undefined) {
-            command += ` -frames:a ${this.options.frames}`;
-        }
-        if (this.options.sampleFormat !== undefined) {
-            command += ` -sample_fmt:a ${this.options.sampleFormat}`;
-        }
-
-        command += ` ${outputFile}`;
-        await execCommand(command);
-        return outputFile;
+        });
     }
 }
 
