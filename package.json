@@ -4,7 +4,7 @@
   "description": "A node audio processing library using FFmpeg. It can convert audio files and mix them.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DavidRobertAnsart/ffmpeg-audio-mixer"
+    "url": "git+https://github.com/DavidRobertAnsart/ffmpeg-audio-mixer.git"
   },
   "author": "David Robert-Ansart <david.robertansart@gmail.com>",
   "license": "MIT",
