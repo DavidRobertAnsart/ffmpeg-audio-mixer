@@ -2,12 +2,13 @@ import { execCommand } from './exec-command';
 import type {
     InputOptions,
     OutputOptions,
+    AudioInput,
     Codecs,
     SampleFormats,
 } from './ffmpeg-audio-mixer.types';
 import { getFfmpegArgs } from './get-ffmpeg-args';
 
-const getInput = (input: string | InputOptions) =>
+const getInput = (input: AudioInput): InputOptions =>
     typeof input === 'string'
         ? {
               inputFile: input,
@@ -18,13 +19,13 @@ export class AudioMixer {
     private inputs: InputOptions[];
     private options: OutputOptions;
 
-    public constructor(...inputs: (string | InputOptions)[]) {
-        this.inputs = inputs.map(getInput);
-        this.options = {};
+    public constructor(inputs: AudioInput | AudioInput[], options?: OutputOptions) {
+        this.inputs = Array.isArray(inputs) ? inputs.map(getInput) : [getInput(inputs)];
+        this.options = options || {};
     }
 
     // --- Inputs ---
-    public addInput(input: string | InputOptions) {
+    public addInput(input: AudioInput) {
         this.inputs.push(getInput(input));
         return this;
     }
@@ -42,7 +43,7 @@ export class AudioMixer {
         this.options.codec = codec;
         return this;
     }
-    public setSampleFormat(sampleFormat?: SampleFormats) {
+    public setSampleFormat(sampleFormat: SampleFormats) {
         this.options.sampleFormat = sampleFormat;
         return this;
     }
@@ -52,7 +53,7 @@ export class AudioMixer {
     }
 
     // --- Processing ---
-    public async toFile(outputFileName: string): Promise<string> {
+    public async toFile(outputFileName: string): Promise<void> {
         if (!outputFileName) {
             throw new Error('Missing output file path');
         }
@@ -62,7 +63,6 @@ export class AudioMixer {
             fileName: outputFileName,
         });
         await execCommand('ffmpeg', args);
-        return outputFileName;
     }
 
     public toStream(fileFormat: string) {
@@ -90,6 +90,6 @@ export class AudioMixer {
     }
 }
 
-export function mixAudio(...inputs: (string | InputOptions)[]) {
-    return new AudioMixer(...inputs);
+export function mixAudio(inputs: AudioInput | AudioInput[], options?: OutputOptions) {
+    return new AudioMixer(inputs, options);
 }

@@ -18,7 +18,8 @@
     "mixer",
     "mix",
     "audio-mixer",
-    "node"
+    "node",
+    "mp3"
   ],
   "files": [
     "lib"

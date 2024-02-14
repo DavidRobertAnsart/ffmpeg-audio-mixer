@@ -38,6 +38,8 @@ export type InputOptions = {
     delay?: number;
 };
 
+export type AudioInput = string | InputOptions;
+
 export type OutputOptions = {
     // Number of audio frames.
     frames?: number;
