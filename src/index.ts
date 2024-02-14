@@ -1,5 +1,2 @@
-export * from './tune.types';
-export { Tune } from './tune';
-import { tune } from './tune';
-
-export default tune;
+export * from './ffmpeg-audio-mixer.types';
+export { AudioMixer, mixAudio } from './ffmpeg-audio-mixer';

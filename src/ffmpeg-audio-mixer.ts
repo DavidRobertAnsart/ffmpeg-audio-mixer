@@ -1,6 +1,11 @@
 import { execCommand } from './exec-command';
+import type {
+    InputOptions,
+    OutputOptions,
+    Codecs,
+    SampleFormats,
+} from './ffmpeg-audio-mixer.types';
 import { getFfmpegArgs } from './get-ffmpeg-args';
-import type { InputOptions, OutputOptions, Codecs, SampleFormats } from './tune.types';
 
 const getInput = (input: string | InputOptions) =>
     typeof input === 'string'
@@ -9,13 +14,13 @@ const getInput = (input: string | InputOptions) =>
           }
         : input;
 
-export class Tune {
+export class AudioMixer {
     private inputs: InputOptions[];
     private options: OutputOptions;
 
-    public constructor(input: string | InputOptions, options?: OutputOptions) {
-        this.inputs = [getInput(input)];
-        this.options = options || {};
+    public constructor(...inputs: (string | InputOptions)[]) {
+        this.inputs = inputs.map(getInput);
+        this.options = {};
     }
 
     // --- Inputs ---
@@ -25,6 +30,10 @@ export class Tune {
     }
 
     // --- Options ---
+    public setOptions(options: OutputOptions) {
+        this.options = options;
+        return this;
+    }
     public setFrames(frames: number) {
         this.options.frames = frames;
         return this;
@@ -52,8 +61,6 @@ export class Tune {
             kind: 'file',
             fileName: outputFileName,
         });
-        // eslint-disable-next-line no-console
-        console.log(args);
         await execCommand('ffmpeg', args);
         return outputFileName;
     }
@@ -67,8 +74,6 @@ export class Tune {
             kind: 'stream',
             fileFormat,
         });
-        // eslint-disable-next-line no-console
-        console.log(args);
         return execCommand('ffmpeg', args, true);
     }
 
@@ -85,6 +90,6 @@ export class Tune {
     }
 }
 
-export function tune(input: string | InputOptions, options?: OutputOptions) {
-    return new Tune(input, options);
+export function mixAudio(...inputs: (string | InputOptions)[]) {
+    return new AudioMixer(...inputs);
 }

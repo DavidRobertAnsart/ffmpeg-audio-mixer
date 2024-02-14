@@ -15,11 +15,6 @@ export function execCommand(
     const process = spawn(command, args);
     process.stderr.setEncoding('utf-8');
 
-    // Temporary
-    process.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-    });
-
     const execPromise = new Promise<void>((resolve, reject) => {
         let processHasError = false;
         process.on('error', () => {

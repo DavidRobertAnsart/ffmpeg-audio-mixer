@@ -1,10 +1,10 @@
 {
-  "name": "node-tune",
+  "name": "ffmpeg-audio-mixer",
   "version": "1.2.0",
-  "description": "A node audio processing library using FFmpeg. It can convert audio files, mix them.",
+  "description": "A node audio processing library using FFmpeg. It can convert audio files and mix them.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DavidRobertAnsart/node-tune"
+    "url": "https://github.com/DavidRobertAnsart/ffmpeg-audio-mixer"
   },
   "author": "David Robert-Ansart <david.robertansart@gmail.com>",
   "license": "MIT",
@@ -12,12 +12,13 @@
   "module": "lib/index.mjs",
   "typings": "lib/index.d.ts",
   "keywords": [
-    "tune",
-    "audio",
-    "mix",
-    "mixer",
     "ffmpeg",
-    "audio-mixer"
+    "audio",
+    "sound",
+    "mixer",
+    "mix",
+    "audio-mixer",
+    "node"
   ],
   "files": [
     "lib"

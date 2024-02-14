@@ -1,4 +1,4 @@
-import type { InputOptions, OutputOptions } from './tune.types';
+import type { InputOptions, OutputOptions } from './ffmpeg-audio-mixer.types';
 
 export type Output =
     | {
@@ -62,7 +62,9 @@ function getMixedComplexFilters(inputs: InputOptions[]) {
     for (let i = 0; i < inputs.length; i++) {
         const input = inputs[i];
         if (input.delay !== undefined && input.delay !== 0) {
-            complexFilters.push(`[${i}]adelay=${input.delay}:1[${i}bis]`);
+            complexFilters.push(
+                `[${i}]adelay=${input.delay}:1${inputs.length > 1 ? `[${i}bis]` : ''}`,
+            );
             inputsNames[i] = `${i}bis`;
         }
     }

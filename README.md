@@ -1,8 +1,18 @@
-# Node-Tune
+# Ffmpeg audio mixer
 
-A node audio processing library using FFmpeg. It can convert audio files, mix them.
+A node audio processing library using FFmpeg. It can convert audio files and mix them.
 
 ## Install
+
+```bash
+npm install ffmpeg-audio-mixer
+```
+
+or
+
+```bash
+yarn add ffmpeg-audio-mixer
+```
 
 ## Example
 
