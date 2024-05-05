@@ -36,6 +36,11 @@ export type InputOptions = {
     weight?: number;
     // Audio delay in ms. (Optional, default is `0`)
     delay?: number;
+    // Audio trim in seconds.
+    trim?: {
+        start?: number;
+        end?: number;
+    };
 };
 
 export type AudioInput = string | InputOptions;

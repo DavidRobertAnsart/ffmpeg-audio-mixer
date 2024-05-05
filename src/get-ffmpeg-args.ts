@@ -61,11 +61,29 @@ function getMixedComplexFilters(inputs: InputOptions[]) {
     const inputsNames = Object.keys(inputs);
     for (let i = 0; i < inputs.length; i++) {
         const input = inputs[i];
-        if (input.delay !== undefined && input.delay !== 0) {
+        const hasDelay = input.delay !== undefined && input.delay !== 0;
+
+        // Trim first
+        if (input.trim !== undefined && (input.trim.start || input.trim.end)) {
             complexFilters.push(
-                `[${i}]adelay=${input.delay}:1${inputs.length > 1 ? `[${i}bis]` : ''}`,
+                `[${i}]atrim=${[
+                    input.trim.start ? `start=${input.trim.start}` : '',
+                    input.trim.end && (!input.trim.start || input.trim.end > input.trim.start)
+                        ? `end=${input.trim.end}`
+                        : '',
+                ]
+                    .filter((attr) => Boolean(attr))
+                    .join(':')}${inputs.length > 1 || hasDelay ? `[${i}bis]` : ''}`,
             );
             inputsNames[i] = `${i}bis`;
+        }
+
+        // Delay after
+        if (hasDelay) {
+            complexFilters.push(
+                `[${inputsNames[i]}]adelay=${input.delay}:1${inputs.length > 1 ? `[${i}ter]` : ''}`,
+            );
+            inputsNames[i] = `${i}ter`;
         }
     }
     if (inputs.length > 1) {
