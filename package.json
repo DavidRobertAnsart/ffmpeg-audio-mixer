@@ -1,6 +1,6 @@
 {
   "name": "ffmpeg-audio-mixer",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A node audio processing library using FFmpeg. It can convert audio files and mix them.",
   "repository": {
     "type": "git",
