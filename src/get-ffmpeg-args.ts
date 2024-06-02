@@ -27,7 +27,7 @@ export function getFfmpegArgs(inputs: InputOptions[], options: OutputOptions, ou
     }
 
     // [4] Add complex filter.
-    const complexFilters = getMixedComplexFilters(inputs);
+    const complexFilters = getMixedComplexFilters(inputs, options.normalize);
     if (options.volume) {
         complexFilters.push(`volume=${options.volume}`);
     }
@@ -56,7 +56,7 @@ export function getFfmpegArgs(inputs: InputOptions[], options: OutputOptions, ou
 }
 
 // Mix inputs together
-function getMixedComplexFilters(inputs: InputOptions[]) {
+function getMixedComplexFilters(inputs: InputOptions[], normalize = false) {
     const complexFilters: string[] = [];
     const inputsNames = Object.keys(inputs);
     for (let i = 0; i < inputs.length; i++) {
@@ -90,7 +90,7 @@ function getMixedComplexFilters(inputs: InputOptions[]) {
         complexFilters.push(
             `[${inputsNames.join('][')}]amix=inputs=${
                 inputs.length
-            }:duration=longest:weights=${inputs.map((i) => i.weight ?? 1).join(' ')}`,
+            }:duration=longest:weights=${inputs.map((i) => i.weight ?? 1).join(' ')}:normalize=${normalize ? '1' : '0'}`,
         );
     }
     return complexFilters;

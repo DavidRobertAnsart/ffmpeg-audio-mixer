@@ -54,4 +54,6 @@ export type OutputOptions = {
     sampleFormat?: SampleFormats;
     // Audio volume.
     volume?: number;
+    // Audio normalization.
+    normalize?: boolean;
 };
